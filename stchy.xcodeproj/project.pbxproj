@@ -14,6 +14,9 @@
 		25E46379203CDCF400539375 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 25E46377203CDCF400539375 /* LaunchScreen.storyboard */; };
 		25E46384203CDCF400539375 /* stchyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E46383203CDCF400539375 /* stchyTests.swift */; };
 		25E4638F203CDCF400539375 /* stchyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E4638E203CDCF400539375 /* stchyUITests.swift */; };
+		25E463A1203CF1A700539375 /* GiphySearchAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E463A0203CF1A700539375 /* GiphySearchAPI.swift */; };
+		25E463A3203CF31700539375 /* GiphyResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E463A2203CF31700539375 /* GiphyResult.swift */; };
+		25E463A5203D103700539375 /* GiphySearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E463A4203D103700539375 /* GiphySearchViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +50,9 @@
 		25E4638A203CDCF400539375 /* stchyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = stchyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		25E4638E203CDCF400539375 /* stchyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = stchyUITests.swift; sourceTree = "<group>"; };
 		25E46390203CDCF400539375 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		25E463A0203CF1A700539375 /* GiphySearchAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiphySearchAPI.swift; sourceTree = "<group>"; };
+		25E463A2203CF31700539375 /* GiphyResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiphyResult.swift; sourceTree = "<group>"; };
+		25E463A4203D103700539375 /* GiphySearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiphySearchViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,12 +103,10 @@
 		25E4636D203CDCF400539375 /* stchy */ = {
 			isa = PBXGroup;
 			children = (
-				25E4636E203CDCF400539375 /* AppDelegate.swift */,
-				25E46370203CDCF400539375 /* ViewController.swift */,
-				25E46372203CDCF400539375 /* Main.storyboard */,
-				25E46375203CDCF400539375 /* Assets.xcassets */,
-				25E46377203CDCF400539375 /* LaunchScreen.storyboard */,
-				25E4637A203CDCF400539375 /* Info.plist */,
+				25E4639C203CF11A00539375 /* Models */,
+				25E4639D203CF12100539375 /* Views */,
+				25E4639E203CF12500539375 /* Controllers */,
+				25E4639F203CF14300539375 /* SupportingFiles */,
 			);
 			path = stchy;
 			sourceTree = "<group>";
@@ -123,6 +127,43 @@
 				25E46390203CDCF400539375 /* Info.plist */,
 			);
 			path = stchyUITests;
+			sourceTree = "<group>";
+		};
+		25E4639C203CF11A00539375 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				25E463A2203CF31700539375 /* GiphyResult.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		25E4639D203CF12100539375 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				25E46372203CDCF400539375 /* Main.storyboard */,
+				25E46375203CDCF400539375 /* Assets.xcassets */,
+				25E46377203CDCF400539375 /* LaunchScreen.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		25E4639E203CF12500539375 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				25E46370203CDCF400539375 /* ViewController.swift */,
+				25E4636E203CDCF400539375 /* AppDelegate.swift */,
+				25E463A0203CF1A700539375 /* GiphySearchAPI.swift */,
+				25E463A4203D103700539375 /* GiphySearchViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		25E4639F203CF14300539375 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				25E4637A203CDCF400539375 /* Info.plist */,
+			);
+			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,7 +300,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				25E463A5203D103700539375 /* GiphySearchViewController.swift in Sources */,
+				25E463A3203CF31700539375 /* GiphyResult.swift in Sources */,
 				25E46371203CDCF400539375 /* ViewController.swift in Sources */,
+				25E463A1203CF1A700539375 /* GiphySearchAPI.swift in Sources */,
 				25E4636F203CDCF400539375 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -427,7 +471,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = stchy/Info.plist;
+				DEVELOPMENT_TEAM = JJNWD2J7X4;
+				INFOPLIST_FILE = "$(SRCROOT)/stchy/SupportingFiles/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.blakebarrett.stchy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -441,7 +486,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = stchy/Info.plist;
+				DEVELOPMENT_TEAM = JJNWD2J7X4;
+				INFOPLIST_FILE = "$(SRCROOT)/stchy/SupportingFiles/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.blakebarrett.stchy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
