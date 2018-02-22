@@ -12,10 +12,9 @@ class ViewController: UIViewController {
     
     var searchViewController: GiphySearchViewController?
     
+    var results = [GiphyResult]()
+    
     override func viewDidLoad() {
-        searchViewController = GiphySearchViewController() { item in
-            print(String(describing: item?.title))
-        }
         super.viewDidLoad()
     }
 
@@ -24,7 +23,18 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        if results.count == 0 {
+            presentSearch()
+        }
+    }
+    
     private func presentSearch() {
+        searchViewController = GiphySearchViewController() { [weak self] item in
+            guard let item = item else { return }
+            self?.results.append(item)
+            print(String(describing: item.title))
+        }
         guard let searchView = searchViewController else { return }
         present(searchView, animated: true)
     }

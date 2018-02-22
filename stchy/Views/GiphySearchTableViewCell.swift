@@ -49,11 +49,11 @@ extension UIImageView {
             guard let imageData = try? Data.init(contentsOf: url),
                   let image = UIImage(data: imageData) else { return }
             DispatchQueue.main.async { [weak self] in
-                if let width = self?.frame.width,
-                   let height = image.cgImage?.height {
-                    let aspectRatio = width / CGFloat(height)
-                    self?.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: width, height: width / aspectRatio))
-                }
+//                if let width = self?.frame.width,
+//                   let height = image.cgImage?.height {
+//                    let aspectRatio = width / CGFloat(height)
+//                    self?.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: width, height: width / aspectRatio))
+//                }
                 self?.image = image
                 self?.contentMode = .scaleAspectFit
             }
