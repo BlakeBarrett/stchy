@@ -17,10 +17,14 @@ public enum Rating: String {
 
 public class GiphySearchAPI {
     
-    private static let baseSearchUrl = "https://api.giphy.com/v1/gifs/search?api_key=WvKCzzlxrgR5wptk84eVyru6wOSnmzYh&q=&limit=25&offset=0&lang=en&rating="
+    private static let baseSearchUrl = "https://api.giphy.com/v1/gifs/search?api_key=WvKCzzlxrgR5wptk84eVyru6wOSnmzYh&lang=en"
     
-    public static func search(query: String, rating: Rating = Rating.PG, completion: @escaping ([GiphyResult]?) -> Void) {
-        let queryString = baseSearchUrl + rating.rawValue + "&q=" + query
+    public static func search(query: String, rating: Rating = Rating.PG, maxResults: Int = 25, page: Int = 0, completion: @escaping ([GiphyResult]?) -> Void) {
+        guard let query = query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
+            completion(nil)
+            return
+        }
+        let queryString = baseSearchUrl + "&rating=" + rating.rawValue + "&q=" + query + "&limit=" + String(describing: maxResults) + "&offset=" + String(describing: page)
         guard let queryURL = URL(string: queryString) else {
             completion(nil)
             return

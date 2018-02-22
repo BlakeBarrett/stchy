@@ -20,6 +20,8 @@ public class GiphyResult {
     public var previewMP4: URL?
     public var fullsizeMP4: URL?
     
+    public var aspectRatio: Float?
+    
     init(json: JSON) {
         jsonResult = json
         id = json["id"] as? String
@@ -28,6 +30,10 @@ public class GiphyResult {
         if let still = images["480w_still"] as? JSON,
            let previewImageUrlString = still["url"] as? String {
             previewImage = URL(string: previewImageUrlString)
+            if let width = (still["width"] as? NSString)?.floatValue,
+               let height = (still["height"] as? NSString)?.floatValue {
+                aspectRatio = Float(width / height)
+            }
         }
         if let preview = images["preview"] as? JSON,
            let previewMP4UrlString = preview["mp4"] as? String {

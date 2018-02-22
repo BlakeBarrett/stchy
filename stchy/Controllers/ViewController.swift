@@ -10,7 +10,12 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    var searchViewController: GiphySearchViewController?
+    
     override func viewDidLoad() {
+        searchViewController = GiphySearchViewController() { item in
+            print(String(describing: item?.title))
+        }
         super.viewDidLoad()
     }
 
@@ -19,6 +24,14 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
+    private func presentSearch() {
+        guard let searchView = searchViewController else { return }
+        present(searchView, animated: true)
+    }
+    
+    @IBAction func onClick(_ sender: Any) {
+        presentSearch()
+    }
+    
 }
 

@@ -17,6 +17,7 @@
 		25E463A1203CF1A700539375 /* GiphySearchAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E463A0203CF1A700539375 /* GiphySearchAPI.swift */; };
 		25E463A3203CF31700539375 /* GiphyResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E463A2203CF31700539375 /* GiphyResult.swift */; };
 		25E463A5203D103700539375 /* GiphySearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E463A4203D103700539375 /* GiphySearchViewController.swift */; };
+		25F4764D203E309300D63AC0 /* GiphySearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F4764C203E309300D63AC0 /* GiphySearchTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		25E463A0203CF1A700539375 /* GiphySearchAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiphySearchAPI.swift; sourceTree = "<group>"; };
 		25E463A2203CF31700539375 /* GiphyResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiphyResult.swift; sourceTree = "<group>"; };
 		25E463A4203D103700539375 /* GiphySearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiphySearchViewController.swift; sourceTree = "<group>"; };
+		25F4764C203E309300D63AC0 /* GiphySearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiphySearchTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +145,7 @@
 				25E46372203CDCF400539375 /* Main.storyboard */,
 				25E46375203CDCF400539375 /* Assets.xcassets */,
 				25E46377203CDCF400539375 /* LaunchScreen.storyboard */,
+				25F4764C203E309300D63AC0 /* GiphySearchTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				25E46371203CDCF400539375 /* ViewController.swift in Sources */,
 				25E463A1203CF1A700539375 /* GiphySearchAPI.swift in Sources */,
 				25E4636F203CDCF400539375 /* AppDelegate.swift in Sources */,
+				25F4764D203E309300D63AC0 /* GiphySearchTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
