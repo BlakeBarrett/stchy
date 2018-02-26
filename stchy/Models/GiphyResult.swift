@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AVFoundation
 
 public class GiphyResult {
     
@@ -20,6 +21,8 @@ public class GiphyResult {
     public var previewMP4: URL?
     public var fullsizeMP4: URL?
     
+    public var frames: Int?
+    public var duration: CMTime?
     public var aspectRatio: Float?
     
     init(json: JSON) {
@@ -40,8 +43,13 @@ public class GiphyResult {
             previewMP4 = URL(string: previewMP4UrlString)
         }
         if let fullsize = images["original"] as? JSON,
-           let fullsizeMP4UrlString = fullsize["mp4"] as? String {
+           let fullsizeMP4UrlString = fullsize["mp4"] as? String,
+           let fframes = (fullsize["frames"] as? NSString)?.floatValue {
             fullsizeMP4 = URL(string: fullsizeMP4UrlString)
+            frames = Int(fframes)
+            let frameRate: Int32.IntegerLiteralType = 10 // This is Giphy's frame-rate.
+            let seconds = Double(fframes) / Double(frameRate)
+            duration = CMTime(seconds: seconds, preferredTimescale: frameRate)
         }
     }
 }
