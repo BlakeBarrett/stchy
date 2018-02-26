@@ -30,7 +30,6 @@ class GiphySearchTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         if !rendered {
             initAutoLayoutConstraints()
-            return
         }
         super.layoutSubviews()
     }
@@ -43,7 +42,7 @@ class GiphySearchTableViewCell: UITableViewCell {
         NSLayoutConstraint(item: imageView, attribute: .trailing, relatedBy: .equal, toItem: contentView, attribute: .trailingMargin, multiplier: 1.0, constant: 0.0).isActive = true
         NSLayoutConstraint(item: imageView, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1.0, constant: 0.0).isActive = true
         NSLayoutConstraint(item: imageView, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1.0, constant: 0.0).isActive = true
-//        NSLayoutConstraint(item: imageView, attribute: .width, relatedBy: .equal, toItem: contentView, attribute:.width, multiplier: 1.0, constant:0.0).isActive = true
+        NSLayoutConstraint(item: imageView, attribute: .width, relatedBy: .equal, toItem: contentView, attribute: .width, multiplier: 1.0, constant:0.0).isActive = true
         
         rendered = true
     }
