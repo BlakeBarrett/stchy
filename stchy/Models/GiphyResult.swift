@@ -13,7 +13,7 @@ public class GiphyResult {
     
     typealias JSON = [String: Any]
     
-    private var jsonResult: JSON
+    private var json: JSON
     
     public var id: String?
     public var title: String?
@@ -22,11 +22,10 @@ public class GiphyResult {
     public var fullsizeMP4: URL?
     
     public var frames: Int?
-    public var duration: CMTime?
     public var aspectRatio: Float?
     
     init(json: JSON) {
-        jsonResult = json
+        self.json = json
         id = json["id"] as? String
         title = json["title"] as? String
         guard let images = json["images"] as? JSON else { return }
@@ -47,9 +46,6 @@ public class GiphyResult {
            let fframes = (fullsize["frames"] as? NSString)?.floatValue {
             fullsizeMP4 = URL(string: fullsizeMP4UrlString)
             frames = Int(fframes)
-            let frameRate: Int32.IntegerLiteralType = 10 // This is Giphy's frame-rate.
-            let seconds = Double(fframes) / Double(frameRate)
-            duration = CMTime(seconds: seconds, preferredTimescale: frameRate)
         }
     }
 }
