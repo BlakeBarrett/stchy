@@ -10,6 +10,9 @@ import UIKit
 import AVKit
 import AVFoundation
 
+// TODO: Add fullscreen thumbnail view while the video is loading
+// alternatively, add a full-size video preview that isn't a fullscreen stand alone ViewController
+
 class DetailViewController: UIViewController {
     
     func configureView() {

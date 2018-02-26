@@ -9,6 +9,11 @@
 import Foundation
 import UIKit
 
+// TODO: Work on variable row-height TableViewCells.
+// https://www.raywenderlich.com/129059/self-sizing-table-view-cells
+// http://www.thomashanning.com/uitableview-automatic-row-height/
+// https://stackoverflow.com/questions/30494702/dynamic-height-issue-for-uitableview-cells-swift
+
 class GiphySearchTableViewCell: UITableViewCell {
     
     var item: GiphyResult? {
@@ -58,6 +63,8 @@ class GiphySearchTableViewCell: UITableViewCell {
         imageView?.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: height)
     }
 }
+
+// TODO: this sucks, make this better.
 
 extension UIImageView {
     public func loadImageFromUrl(url: URL) {

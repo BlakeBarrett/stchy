@@ -8,6 +8,13 @@
 
 import UIKit
 
+
+// TODO: Add "export" button,
+//  Run through all results,
+//  download all MP4 assets locally to a temp dir,
+//  use VideoMergingUtils to merge all the videos together,
+//  wire up "export" feature (see MRGR).
+
 class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
