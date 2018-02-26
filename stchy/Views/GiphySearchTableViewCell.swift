@@ -28,18 +28,35 @@ class GiphySearchTableViewCell: UITableViewCell {
     }
     
     override func layoutSubviews() {
+        if !rendered {
+            initAutoLayoutConstraints()
+            return
+        }
         super.layoutSubviews()
+    }
+    
+    private func initAutoLayoutConstraints() {
+        
+        guard let imageView = imageView else { return }
+        
+        NSLayoutConstraint(item: imageView, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leadingMargin, multiplier: 1.0, constant: 0.0).isActive = true
+        NSLayoutConstraint(item: imageView, attribute: .trailing, relatedBy: .equal, toItem: contentView, attribute: .trailingMargin, multiplier: 1.0, constant: 0.0).isActive = true
+        NSLayoutConstraint(item: imageView, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1.0, constant: 0.0).isActive = true
+        NSLayoutConstraint(item: imageView, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1.0, constant: 0.0).isActive = true
+//        NSLayoutConstraint(item: imageView, attribute: .width, relatedBy: .equal, toItem: contentView, attribute:.width, multiplier: 1.0, constant:0.0).isActive = true
+        
+        rendered = true
     }
     
     func render(_ item: GiphyResult) {
         
         guard let previewImageUrl = item.previewImage else { return }
-        let imageView = UIImageView(frame: self.frame)
-        imageView.loadImageFromUrl(url: previewImageUrl)
-        contentView.subviews.forEach { (view) in
-            view.removeFromSuperview()
-        }
-        contentView.addSubview(imageView)
+        imageView?.loadImageFromUrl(url: previewImageUrl)
+        imageView?.contentMode = .scaleAspectFit
+        
+        guard let aspectRatio = item.aspectRatio else { return }
+        let height = frame.width / CGFloat(aspectRatio)
+        imageView?.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: height)
     }
 }
 

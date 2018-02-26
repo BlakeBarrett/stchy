@@ -15,7 +15,9 @@ class DetailViewController: UIViewController {
     func configureView() {
         // Update the user interface for the detail item.
         if let detail = detailItem {
-            guard let url = detail.fullsizeMP4 else { return }
+            guard let title = detail.title,
+                  let url = detail.fullsizeMP4 else { return }
+            self.title = title
             playVideo(url: url)
         }
     }

@@ -103,10 +103,11 @@ extension GiphySearchViewController {
         let tableFrame = CGRect(x: 0, y: y, width: view.frame.width, height: height)
         tableView = UITableView(frame: tableFrame)
         tableView.register(GiphySearchTableViewCell.classForCoder().class(), forCellReuseIdentifier: poweredByGiphy)
-//        tableView.contentInset = UIEdgeInsetsMake(20.0, 0.0, 0.0, 0.0)
-//        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
+        tableView.rowHeight = UITableViewAutomaticDimension
 //        tableView.estimatedRowHeight = 200
-        tableView.rowHeight = view.frame.width / (16/9)
+//        tableView.rowHeight = view.frame.width / (16/9)
+        tableView.estimatedRowHeight = view.frame.width / (16/9)
         tableView.dataSource = self
         tableView.delegate = self
         view.addSubview(tableView)
