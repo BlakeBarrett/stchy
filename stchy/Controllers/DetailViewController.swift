@@ -7,13 +7,16 @@
 //
 
 import UIKit
+import AVKit
+import AVFoundation
 
 class DetailViewController: UIViewController {
     
     func configureView() {
         // Update the user interface for the detail item.
         if let detail = detailItem {
-            
+            guard let url = detail.fullsizeMP4 else { return }
+            playVideo(url: url)
         }
     }
 
@@ -30,6 +33,20 @@ class DetailViewController: UIViewController {
     var detailItem: GiphyResult? {
         didSet {
             configureView()
+        }
+    }
+}
+
+extension DetailViewController {
+    
+    func playVideo(url: URL) {
+        // Create a new AVPlayerViewController and pass it a reference to the player.
+        let controller = AVPlayerViewController()
+        controller.player = AVPlayer(url: url)
+        
+        // Modally present the player and call the player's play() method when complete.
+        present(controller, animated: true) {
+            controller.player?.play()
         }
     }
 }
