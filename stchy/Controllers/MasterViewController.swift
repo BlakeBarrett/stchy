@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import AVFoundation
 
 // TODO: Add "export" button,
 //  Run through all results,
@@ -21,20 +21,24 @@ class MasterViewController: UITableViewController {
     var searchViewController: GiphySearchViewController? = nil
     var results = [GiphyResult]()
     
+    var tempVideoPath: URL? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         navigationItem.leftBarButtonItem = editButtonItem
 
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
+        _ = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(export))
         navigationItem.rightBarButtonItem = addButton
         if let split = splitViewController {
             let controllers = split.viewControllers
             detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
         }
-        
-        navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "stchy"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
+        initNotificationListeners()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -119,6 +123,85 @@ extension MasterViewController {
             results.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         default: break
+        }
+    }
+}
+
+extension MasterViewController {
+    @objc func export() {
+        let outputUrl = getPathForTempFileNamed(named: "temp.mov")
+        let videos = results.map { value -> Video in
+            return VideoResult(value: value)
+        }
+        let _ = VideoMergingUtils.append(videos, andExportTo: outputUrl, with: nil)
+    }
+}
+
+extension MasterViewController {
+    
+    func initNotificationListeners() {
+        self.tempVideoPath = getPathForTempFileNamed(named: "temp.mov")
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "videoExportDone"), object: nil, queue: OperationQueue.main) {message in
+            if let url = message.object as? URL {
+//                //Save:
+//                let filename = self.getPathStringForFile(named: "temp.mov")
+//                UISaveVideoAtPathToSavedPhotosAlbum(filename, nil, nil, nil);
+//
+//                //Export:
+                let activity = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                if (UIDevice.current.userInterfaceIdiom == .pad) {
+                    let nav = UINavigationController(rootViewController: activity)
+                    nav.modalPresentationStyle = .popover
+                    
+                    let popover = nav.popoverPresentationController as UIPopoverPresentationController!
+                    popover?.barButtonItem = self.navigationItem.rightBarButtonItem
+                    
+                    self.present(nav, animated: true, completion: nil)
+                } else {
+                    self.present(activity, animated: true, completion: nil)
+                }
+            }
+        }
+    }
+
+    func getPathStringForFile(named filename: String) -> String {
+        return NSTemporaryDirectory() + filename
+    }
+    
+    func getPathForTempFileNamed(named filename: String) -> URL {
+        let outputPath = getPathStringForFile(named: filename)
+        let outputUrl = URL(fileURLWithPath: outputPath)
+        removeTempFileAtPath(outputPath)
+        return outputUrl
+    }
+
+    func removeTempFileAtPath(_ path: String) {
+        let fileManager = FileManager.default
+        if (fileManager.fileExists(atPath: path)) {
+            do {
+                try fileManager.removeItem(atPath: path)
+            } catch _ {
+            }
+        }
+    }
+}
+
+class VideoResult: Video {
+    var duration: CMTime {
+        get {
+            return self.asset.duration
+        }
+        set(value) { }
+    }
+    var muted = false
+    var asset: AVAsset
+    
+    init(value: GiphyResult) {
+        if let assetUrl = value.fullsizeMP4 {
+            self.asset = AVAsset(url: assetUrl)
+        } else {
+            // This is the "this doesn't work, leave me alone" path.
+            asset = AVAsset(url: URL(fileURLWithPath: ""))
         }
     }
 }

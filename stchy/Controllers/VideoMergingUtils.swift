@@ -20,7 +20,7 @@ protocol Video {
 class VideoMergingUtils {
     
     // MARK: AVFoundation Video Manipulation Code
-    func append(_ assets: [Video], andExportTo outputUrl: URL, with backgroundAudio: MPMediaItem?) -> Bool {
+    static func append(_ assets: [Video], andExportTo outputUrl: URL, with backgroundAudio: MPMediaItem?) -> Bool {
         let mixComposition = AVMutableComposition()
         
         let videoTrack = mixComposition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid)
