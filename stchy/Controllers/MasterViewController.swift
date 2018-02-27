@@ -9,11 +9,8 @@
 import UIKit
 import AVFoundation
 
-// TODO: Add "export" button,
-//  Run through all results,
-//  download all MP4 assets locally to a temp dir,
-//  use VideoMergingUtils to merge all the videos together,
-//  wire up "export" feature (see MRGR).
+// TODO: Add "processing" modal
+//  Update the TableViewCell to use `GiphySearchTableViewCell`s.
 
 class MasterViewController: UITableViewController {
 
@@ -155,10 +152,6 @@ extension MasterViewController {
         self.tempVideoPath = getPathForTempFileNamed(named: "temp.mov")
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "videoExportDone"), object: nil, queue: OperationQueue.main) {message in
             if let url = message.object as? URL {
-//                //Save:
-//                let filename = self.getPathStringForFile(named: "temp.mov")
-//                UISaveVideoAtPathToSavedPhotosAlbum(filename, nil, nil, nil);
-//
 //                //Export:
                 let activity = UIActivityViewController(activityItems: [url], applicationActivities: nil)
                 if (UIDevice.current.userInterfaceIdiom == .pad) {
