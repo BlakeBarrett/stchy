@@ -10,10 +10,9 @@ import UIKit
 import AVKit
 import AVFoundation
 
-// TODO: Add fullscreen thumbnail view while the video is loading
-// alternatively, add a full-size video preview that isn't a fullscreen stand alone ViewController
-
 class DetailViewController: UIViewController {
+    
+    var player: AVPlayer?
     
     func configureView() {
         // Update the user interface for the detail item.
@@ -21,7 +20,24 @@ class DetailViewController: UIViewController {
             guard let title = detail.title,
                   let url = detail.fullsizeMP4 else { return }
             self.title = title
-            playVideo(url: url)
+            
+            try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            
+            player = AVPlayer(url: url)
+            guard let player = player else { return }
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(self.playerFinished),
+                                                   name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+                                                   object: self.player?.currentItem)
+            
+            let layer: AVPlayerLayer = AVPlayerLayer(player: player)
+            layer.frame = self.view.bounds
+            layer.videoGravity = AVLayerVideoGravity.resizeAspect
+            
+            // add the layer to the container view
+            self.view.layer.addSublayer(layer)
+            
+            playVideo()
         }
     }
 
@@ -42,16 +58,14 @@ class DetailViewController: UIViewController {
     }
 }
 
-extension DetailViewController {
+@objc extension DetailViewController {
     
-    func playVideo(url: URL) {
-        // Create a new AVPlayerViewController and pass it a reference to the player.
-        let controller = AVPlayerViewController()
-        controller.player = AVPlayer(url: url)
-        
-        // Modally present the player and call the player's play() method when complete.
-        present(controller, animated: true) {
-            controller.player?.play()
-        }
+    @objc func playerFinished() {
+        player?.seek(to: kCMTimeZero)
+        playVideo()
+    }
+    
+    func playVideo() {
+        player?.play()
     }
 }
