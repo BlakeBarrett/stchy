@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import AVFoundation
 
 // TODO: Work on variable row-height TableViewCells.
 // https://www.raywenderlich.com/129059/self-sizing-table-view-cells
@@ -16,6 +17,8 @@ import UIKit
 
 class GiphySearchTableViewCell: UITableViewCell {
     
+    var playerLayer: AVPlayerLayer?
+    
     var item: GiphyResult? {
         didSet(value) {
             guard let value = value else { return }
@@ -23,63 +26,77 @@ class GiphySearchTableViewCell: UITableViewCell {
         }
     }
     var rendered = false
-    
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
+    var listenerOnlyAddedOnce = true
     
     override func layoutSubviews() {
+        backgroundColor = UIColor.gray
         if !rendered {
             initAutoLayoutConstraints()
         }
         super.layoutSubviews()
+        render(item)
     }
     
     private func initAutoLayoutConstraints() {
         
-        guard let imageView = imageView else { return }
-        
-        NSLayoutConstraint(item: imageView, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leadingMargin, multiplier: 1.0, constant: 0.0).isActive = true
-        NSLayoutConstraint(item: imageView, attribute: .trailing, relatedBy: .equal, toItem: contentView, attribute: .trailingMargin, multiplier: 1.0, constant: 0.0).isActive = true
-        NSLayoutConstraint(item: imageView, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1.0, constant: 0.0).isActive = true
-        NSLayoutConstraint(item: imageView, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1.0, constant: 0.0).isActive = true
-        NSLayoutConstraint(item: imageView, attribute: .width, relatedBy: .equal, toItem: contentView, attribute: .width, multiplier: 1.0, constant:0.0).isActive = true
+        NSLayoutConstraint(item: contentView, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leadingMargin, multiplier: 1.0, constant: 0.0).isActive = true
+        NSLayoutConstraint(item: contentView, attribute: .trailing, relatedBy: .equal, toItem: contentView, attribute: .trailingMargin, multiplier: 1.0, constant: 0.0).isActive = true
+        NSLayoutConstraint(item: contentView, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1.0, constant: 0.0).isActive = true
+        NSLayoutConstraint(item: contentView, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1.0, constant: 0.0).isActive = true
+        NSLayoutConstraint(item: contentView, attribute: .width, relatedBy: .equal, toItem: contentView, attribute: .width, multiplier: 1.0, constant:0.0).isActive = true
         
         rendered = true
     }
     
-    func render(_ item: GiphyResult) {
+    func render(_ item: GiphyResult?) {
         
-        guard let previewImageUrl = item.previewImage else { return }
-        imageView?.loadImageFromUrl(url: previewImageUrl)
-        imageView?.contentMode = .scaleAspectFit
+        guard let item = item,
+              let url = item.fullsizeMP4 else { return }
         
-        guard let aspectRatio = item.aspectRatio else { return }
-        let height = frame.width / CGFloat(aspectRatio)
-        imageView?.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: height)
+        if playerLayer != nil {
+            playerLayer?.removeFromSuperlayer()
+        }
+        
+        let player = AVPlayer(url: url)
+        player.isMuted = false
+        player.automaticallyWaitsToMinimizeStalling = true
+        
+        if listenerOnlyAddedOnce {
+            NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime,
+                                                   object: playerLayer?.player?.currentItem,
+                                                   queue: .main) { [weak self] _ in
+                                                    self?.playVideo()
+            }
+            listenerOnlyAddedOnce = false
+        }
+        
+        playerLayer = AVPlayerLayer(player: player)
+        guard let layer = playerLayer else { return }
+        layer.frame = contentView.bounds
+        layer.videoGravity = AVLayerVideoGravity.resizeAspect
+        
+        // add the layer to the container view
+        contentView.layer.addSublayer(layer)
+        
+        playVideo()
     }
 }
 
-// TODO: this sucks, make this better.
-
-extension UIImageView {
-    public func loadImageFromUrl(url: URL) {
-        DispatchQueue.global().async {
-            guard let imageData = try? Data.init(contentsOf: url),
-                  let image = UIImage(data: imageData) else { return }
-            DispatchQueue.main.async { [weak self] in
-//                if let width = self?.frame.width,
-//                   let height = image.cgImage?.height {
-//                    let aspectRatio = width / CGFloat(height)
-//                    self?.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: width, height: width / aspectRatio))
-//                }
-                self?.image = image
-                self?.contentMode = .scaleAspectFit
-            }
+extension GiphySearchTableViewCell {
+    
+    func removePlayer() {
+        playerLayer?.player = nil
+        playerLayer?.sublayers?.forEach({ (layer) in
+            layer.removeFromSuperlayer()
+        })
+        playerLayer?.removeFromSuperlayer()
+        playerLayer = nil
+    }
+    
+    func playVideo() {
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+        playerLayer?.player?.seek(to: kCMTimeZero) { [weak self] _ in
+            self?.playerLayer?.player?.play()
         }
     }
 }
