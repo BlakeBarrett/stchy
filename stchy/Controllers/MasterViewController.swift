@@ -25,11 +25,10 @@ class MasterViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         navigationItem.leftBarButtonItem = editButtonItem
-
+        
+        // Configure the "+" button
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
-        _ = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(export))
         navigationItem.rightBarButtonItem = addButton
         if let split = splitViewController {
             let controllers = split.viewControllers
@@ -37,6 +36,19 @@ class MasterViewController: UITableViewController {
         }
         navigationItem.title = "stchy"
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        // Add Export button
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let exportButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(export))
+        guard let parentView = super.parent?.view else { return }
+        let h: CGFloat = 44.0 // I HATE magic numbers, but this is what InterfaceBuilder says the natural height of this control is.
+        let y: CGFloat = parentView.bounds.height - h
+        let toolBarFrame = CGRect(origin: CGPoint(x: 0, y: y), size: CGSize(width: self.view.frame.width, height: h))
+        let toolBar = UIToolbar(frame: toolBarFrame)
+        toolBar.setItems([spacer, exportButton], animated: true)
+        toolBar.alpha = 1.0
+        // Add the toolBar above the TableView
+        parentView.addSubview(toolBar)
         
         initNotificationListeners()
     }
