@@ -13,34 +13,14 @@ import AVFoundation
 class DetailViewController: UIViewController {
     
     var player: AVPlayer?
+    var playerLayer: AVPlayerLayer?
     
-    func configureView() {
-        // Update the user interface for the detail item.
-        if let detail = detailItem {
-            guard let title = detail.title,
-                  let url = detail.fullsizeMP4 else { return }
-            self.title = title
-            
-            try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-            
-            player = AVPlayer(url: url)
-            guard let player = player else { return }
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(self.playerFinished),
-                                                   name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
-                                                   object: self.player?.currentItem)
-            
-            let layer: AVPlayerLayer = AVPlayerLayer(player: player)
-            layer.frame = self.view.bounds
-            layer.videoGravity = AVLayerVideoGravity.resizeAspect
-            
-            // add the layer to the container view
-            self.view.layer.addSublayer(layer)
-            
-            playVideo()
-        }
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        removePlayer()
+        configureView()
+        playerLayer?.frame =  CGRect(origin: .zero, size: size)
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -60,12 +40,54 @@ class DetailViewController: UIViewController {
 
 @objc extension DetailViewController {
     
-    @objc func playerFinished() {
-        player?.seek(to: kCMTimeZero)
-        playVideo()
+    func configureView() {
+        view.backgroundColor = UIColor.black
+        // Update the user interface for the detail item.
+        if let detail = detailItem {
+            guard let title = detail.title,
+                let url = detail.fullsizeMP4 else { return }
+            self.title = title
+            
+            if playerLayer != nil {
+                playerLayer?.removeFromSuperlayer()
+            }
+            
+            player = AVPlayer(url: url)
+            guard let player = player else { return }
+            player.isMuted = false
+            player.automaticallyWaitsToMinimizeStalling = true
+            
+            NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime,
+                                                   object: self.player?.currentItem,
+                                                   queue: .main) { [weak self] _ in
+                                                    self?.playVideo()
+            }
+            
+            playerLayer = AVPlayerLayer(player: player)
+            guard let layer = playerLayer else { return }
+            layer.frame = view.bounds
+            layer.videoGravity = AVLayerVideoGravity.resizeAspect
+            
+            // add the layer to the container view
+            view.layer.addSublayer(layer)
+            
+            playVideo()
+        }
     }
-    
+
+    func removePlayer() {
+        playerLayer?.player = nil
+        playerLayer?.sublayers?.forEach({ (layer) in
+            layer.removeFromSuperlayer()
+        })
+        playerLayer?.removeFromSuperlayer()
+        playerLayer = nil
+    }
+
     func playVideo() {
-        player?.play()
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+        player?.seek(to: kCMTimeZero) { [weak self] _ in
+            self?.player?.play()
+        }
     }
 }
