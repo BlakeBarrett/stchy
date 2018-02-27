@@ -118,6 +118,7 @@ extension GiphySearchViewController: UITableViewDataSource, UITableViewDelegate 
         guard let results = results else { return nil }
         let size = results.count - 1
         let index = min(indexPath.row, size)
+        if index < 0 { return nil }
         return results[index]
     }
     
