@@ -74,10 +74,10 @@ class VideoMergingUtils {
                 // we can be confident that there is a URL because
                 // we got this far. Otherwise it would've failed.
                 let url = exporter.outputURL!
-                print("MrgrViewController.exportVideo SUCCESS!")
+                print("exportVideo SUCCESS!")
                 if exporter.error != nil {
-                    print("MrgrViewController.exportVideo Error: \(String(describing: exporter.error))")
-                    print("MrgrViewController.exportVideo Description: \(exporter.description)")
+                    print("exportVideo Error: \(String(describing: exporter.error))")
+                    print("exportVideo Description: \(exporter.description)")
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "videoExportDone"), object: exporter.error)
                 } else {
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "videoExportDone"), object: url)
@@ -87,16 +87,16 @@ class VideoMergingUtils {
                 
             case .exporting:
                 let progress = exporter.progress
-                print("MrgrViewController.exportVideo \(progress)")
+                print("exportVideo \(progress)")
                 
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "videoExportProgress"), object: progress)
                 break
                 
             case .failed:
-                print("MrgrViewController.exportVideo Error: \(String(describing: exporter.error))")
-                print("MrgrViewController.exportVideo Description: \(exporter.description)")
+                print("exportVideo Error: \(String(describing: exporter.error))")
+                print("exportVideo Description: \(exporter.description)")
                 
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "videoExportDone"), object: exporter)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: ""), object: exporter)
                 break
                 
             default: break

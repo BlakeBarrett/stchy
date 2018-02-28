@@ -22,31 +22,15 @@ class MasterViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.leftBarButtonItem = editButtonItem
         
-        // Configure the "+" button
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
-        navigationItem.rightBarButtonItem = addButton
-        if let split = splitViewController {
-            let controllers = split.viewControllers
-            detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
-        }
-        navigationItem.title = "stchy"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        
-        // Add Export button
-        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let exportButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(export))
-        guard let parentView = super.parent?.view else { return }
-        let h: CGFloat = 44.0 // I HATE magic numbers, but this is what InterfaceBuilder says the natural height of this control is.
-        let y: CGFloat = parentView.bounds.height - h
-        let toolBarFrame = CGRect(origin: CGPoint(x: 0, y: y), size: CGSize(width: self.view.frame.width, height: h))
-        let toolBar = UIToolbar(frame: toolBarFrame)
-        toolBar.setItems([spacer, exportButton], animated: true)
-        toolBar.alpha = 1.0
-        // Add the toolBar above the TableView
-        parentView.addSubview(toolBar)
-        
+        tableView.register(GiphySearchTableViewCell.classForCoder().class(), forCellReuseIdentifier: GiphySearchViewController.poweredByGiphy)
+        tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = view.frame.width / (16/9)
+
+        initNavGoodies()
+        initAddButton()
+        initExportButton()
         initNotificationListeners()
     }
 
@@ -102,7 +86,7 @@ class MasterViewController: UITableViewController {
 }
 
 extension MasterViewController {
-    
+
     // MARK: - Table View
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -114,10 +98,10 @@ extension MasterViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: GiphySearchViewController.poweredByGiphy, for: indexPath) as? GiphySearchTableViewCell else { return UITableViewCell() }
         let index = indexPath.row
-        let title = (results[index] as GiphyResult).title
-        cell.textLabel!.text = title
+        let item = results[index] as GiphyResult
+        cell.item = item
         return cell
     }
 
@@ -148,11 +132,44 @@ extension MasterViewController {
 
 extension MasterViewController {
     
+    func initNavGoodies() {
+        navigationItem.leftBarButtonItem = editButtonItem
+        navigationItem.title = "stchy"
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
+    func initAddButton() {
+        // Configure the "+" button
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
+        navigationItem.rightBarButtonItem = addButton
+        if let split = splitViewController {
+            let controllers = split.viewControllers
+            detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
+        }
+    }
+    
+    func initExportButton() {
+        // Add Export button
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let exportButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(export))
+        guard let parentView = super.parent?.view else { return }
+        let h: CGFloat = 44.0 // I HATE magic numbers, but this is what InterfaceBuilder says the natural height of this control is.
+        let y: CGFloat = parentView.bounds.height - h
+        let toolBarFrame = CGRect(origin: CGPoint(x: 0, y: y), size: CGSize(width: self.view.frame.width, height: h))
+        let toolBar = UIToolbar(frame: toolBarFrame)
+        toolBar.setItems([spacer, exportButton], animated: true)
+        toolBar.alpha = 1.0
+        // Add the toolBar above the TableView
+        parentView.addSubview(toolBar)
+    }
+    
     func initNotificationListeners() {
         self.tempVideoPath = getPathForTempFileNamed(named: "temp.mov")
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "videoExportDone"), object: nil, queue: OperationQueue.main) {message in
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "videoExportDone"),
+                                               object: nil,
+                                               queue: .main) {message in
             if let url = message.object as? URL {
-//                //Export:
+                //Export:
                 let activity = UIActivityViewController(activityItems: [url], applicationActivities: nil)
                 if (UIDevice.current.userInterfaceIdiom == .pad) {
                     let nav = UINavigationController(rootViewController: activity)

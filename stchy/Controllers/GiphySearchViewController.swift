@@ -11,7 +11,7 @@ import UIKit
 
 class GiphySearchViewController: UIViewController {
     
-    private let poweredByGiphy = "Powered By GIPHY"
+    public static let poweredByGiphy = "Powered By GIPHY"
     private var results: [GiphyResult]?
     private let searchBarTop: CGFloat = 16
     private let searchBarHeight: CGFloat = 56
@@ -65,7 +65,7 @@ extension GiphySearchViewController {
     func addSearchBar() {
         searchBar = UISearchBar(frame: CGRect(x: 0, y: searchBarTop, width: view.frame.width, height: searchBarHeight))
         searchBar.enablesReturnKeyAutomatically = true
-        searchBar.placeholder = poweredByGiphy // As per our section 5A of Giphy's terms of service, this is required.
+        searchBar.placeholder = GiphySearchViewController.poweredByGiphy // As per our section 5A of Giphy's terms of service, this is required.
         searchBar.delegate = self
         view.addSubview(searchBar)
     }
@@ -102,7 +102,7 @@ extension GiphySearchViewController {
         
         let tableFrame = CGRect(x: 0, y: y, width: view.frame.width, height: height)
         tableView = UITableView(frame: tableFrame)
-        tableView.register(GiphySearchTableViewCell.classForCoder().class(), forCellReuseIdentifier: poweredByGiphy)
+        tableView.register(GiphySearchTableViewCell.classForCoder().class(), forCellReuseIdentifier: GiphySearchViewController.poweredByGiphy)
         tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.rowHeight = view.frame.width / (16/9)
@@ -128,7 +128,7 @@ extension GiphySearchViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: poweredByGiphy, for: indexPath) as? GiphySearchTableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: GiphySearchViewController.poweredByGiphy, for: indexPath) as? GiphySearchTableViewCell {
             cell.item = itemAt(indexPath)
             return cell
         }
