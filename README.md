@@ -10,6 +10,14 @@ The code is not perfect, but I am trying to keep it neat and clean (_ish_).
 This codebase as well as the ones for [mrgr](https://github.com/BlakeBarrett/mrgr-swift), [mskr](https://github.com/BlakeBarrett/mskr-swift) and others are good representations of what my coding style is / what you can expect from me. 
 
 
+Remaining **TODO** items:   
+ * Progress indicators
+ * Cache downloaded Giphy-gifs
+ * Screen shots for App Store
+ * App icon
+ * "Production Key" from Giphy 
+
+
 Thank you,
 Blake
 
