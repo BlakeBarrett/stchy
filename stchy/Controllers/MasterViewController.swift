@@ -19,6 +19,7 @@ class MasterViewController: UITableViewController {
     var results = [GiphyResult]()
     
     var tempVideoPath: URL? = nil
+    private var exportInProgress = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,10 +123,12 @@ extension MasterViewController {
 
 extension MasterViewController {
     @objc func export() {
+        guard exportInProgress == false else { return }
         let outputUrl = getPathForTempFileNamed(named: "temp.mov")
         let videos = results.map { value -> Video in
             return VideoResult(value: value)
         }
+        exportInProgress = true
         let _ = VideoMergingUtils.append(videos, andExportTo: outputUrl, with: nil)
     }
 }
@@ -182,6 +185,7 @@ extension MasterViewController {
                 } else {
                     self.present(activity, animated: true, completion: nil)
                 }
+                self.exportInProgress = false
             }
         }
     }
