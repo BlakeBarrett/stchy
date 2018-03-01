@@ -47,9 +47,9 @@ class GiphySearchViewController: UIViewController {
         guard !searchInProgress,
               let query = query else { return }
         GiphySearchAPI.search(query: query, completion: {[weak self] (searchResults) in
-            self?.results = searchResults
             self?.searchInProgress = false
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                self?.results = searchResults
                 self?.tableView.reloadData()
             }
         })

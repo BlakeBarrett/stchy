@@ -175,7 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				25C4AC5C2043FC6200B4988F /* AppDelegate.swift */,
-				254DCB5E2043F8DD00146CA0 /* DetailViewController.swift */,
+                254DCB5E2043F8DD00146CA0 /* DetailViewController.swift */,
 				254DCB5C2043F8DD00146CA0 /* MasterViewController.swift */,
 				25E46370203CDCF400539375 /* ViewController.swift */,
 				25E463A0203CF1A700539375 /* GiphySearchAPI.swift */,

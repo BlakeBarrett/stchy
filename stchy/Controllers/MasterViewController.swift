@@ -169,7 +169,7 @@ extension MasterViewController {
     
     func initNotificationListeners() {
         self.tempVideoPath = getPathForTempFileNamed(named: "temp.mov")
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "videoExportDone"),
+        NotificationCenter.default.addObserver(forName: BBVideoUtils.exportCompleteNotification,
                                                object: nil,
                                                queue: .main) {message in
             if let url = message.object as? URL {
@@ -186,8 +186,8 @@ extension MasterViewController {
                 } else {
                     self.present(activity, animated: true, completion: nil)
                 }
-                self.exportInProgress = false
             }
+            self.exportInProgress = false
         }
     }
 
