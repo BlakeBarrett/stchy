@@ -12,7 +12,6 @@ This codebase as well as the ones for [mrgr](https://github.com/BlakeBarrett/mrg
 
 Remaining **TODO** items:   
  * Progress indicators
- * Cache downloaded Giphy-gifs
  * Screen shots for App Store
  * App icon
  * "Production Key" from Giphy 
