@@ -11,13 +11,13 @@ import AVFoundation
 import BBMultimediaUtils
 
 // TODO: Add "processing" modal
-//  Update the TableViewCell to use `GiphySearchTableViewCell`s.
 
 class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
     var searchViewController: GiphySearchViewController? = nil
     var results = [GiphyResult]()
+    public static var imageCache = [URL: UIImage]()
     
     var tempVideoPath: URL? = nil
     private var exportInProgress = false
@@ -50,6 +50,7 @@ class MasterViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        MasterViewController.imageCache.removeAll()
     }
 
     @objc

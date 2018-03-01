@@ -59,13 +59,22 @@ class GiphySearchTableViewCell: UITableViewCell {
         }
         
         imageView?.image = nil
-        BBImageUtils.loadImage(contentsOf: item.previewImage) { [weak self] image in
-            guard let image = image else { return }
-            if let bounds = self?.contentView.bounds {
-                self?.imageView?.frame = bounds
+        if let previewImageUrl = item.previewImage {
+           if MasterViewController.imageCache[previewImageUrl] == nil {
+                BBImageUtils.loadImage(contentsOf: item.previewImage) { [weak self] image in
+                    guard let image = image else { return }
+                    MasterViewController.imageCache[previewImageUrl] = image
+                    if let bounds = self?.contentView.bounds {
+                        self?.imageView?.frame = bounds
+                    }
+                    self?.imageView?.image = image
+                    self?.imageView?.contentMode = .scaleAspectFit
+                }
+            } else {
+                self.imageView?.frame = self.contentView.bounds
+                self.imageView?.image = MasterViewController.imageCache[previewImageUrl]
+                self.imageView?.contentMode = .scaleAspectFit
             }
-            self?.imageView?.image = image
-            self?.imageView?.contentMode = .scaleAspectFit
         }
         
         let player = AVPlayer(url: url)
