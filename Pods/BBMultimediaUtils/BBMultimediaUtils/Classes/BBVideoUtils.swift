@@ -81,9 +81,9 @@ public class BBVideoUtils {
                 // we got this far. Otherwise it would've failed.
                 if let url = exporter.outputURL {
                     print("exportVideo SUCCESS!")
-                    notificationCenter.post(name: BBVideoUtils.exportCompleteNotification, object: exporter.error ?? url)
+                    notificationCenter.post(name: BBVideoUtils.exportCompleteNotification, object: url)
                 } else {
-                    notificationCenter.post(name: BBVideoUtils.exportCompleteNotification, object: nil)
+                    notificationCenter.post(name: BBVideoUtils.exportCompleteNotification, object: exporter.error)
                 }
                 
             case .exporting:
