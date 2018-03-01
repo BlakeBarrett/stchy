@@ -1,0 +1,15 @@
+PODS:
+  - BBButton (0.1.0)
+  - BBMultimediaUtils (0.1.3)
+
+DEPENDENCIES:
+  - BBButton
+  - BBMultimediaUtils
+
+SPEC CHECKSUMS:
+  BBButton: 58502ed833b5654abaa6fff819efba40d7969a46
+  BBMultimediaUtils: 8e6cb0114faf5ad0551ca88b589cb23d59988b0b
+
+PODFILE CHECKSUM: 7caafc6b3d61a836732324c5b5c278a432173c7a
+
+COCOAPODS: 1.4.0

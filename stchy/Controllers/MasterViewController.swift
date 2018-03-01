@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import BBMultimediaUtils
 
 // TODO: Add "processing" modal
 //  Update the TableViewCell to use `GiphySearchTableViewCell`s.
@@ -129,7 +130,7 @@ extension MasterViewController {
             return VideoResult(value: value)
         }
         exportInProgress = true
-        let _ = VideoMergingUtils.append(videos, andExportTo: outputUrl, with: nil)
+        let _ = BBVideoUtils.merge(videos, andExportTo: outputUrl)
     }
 }
 
@@ -213,21 +214,32 @@ extension MasterViewController {
 }
 
 class VideoResult: Video {
-    var duration: CMTime {
+    
+    var asset: AVAsset?
+    var videoUrl: URL?
+    var thumbnail: UIImage?
+    var duration: CMTime? {
         get {
-            return self.asset.duration
+            return self.asset?.duration
         }
         set(value) { }
     }
     var muted = false
-    var asset: AVAsset
     
     init(value: GiphyResult) {
         if let assetUrl = value.fullsizeMP4 {
-            self.asset = AVAsset(url: assetUrl)
+            asset = AVAsset(url: assetUrl)
+            videoUrl = assetUrl
         } else {
             // This is the "this doesn't work, leave me alone" path.
             asset = AVAsset(url: URL(fileURLWithPath: ""))
+            videoUrl = URL(fileURLWithPath: "")
+        }
+        
+        if let imageUrl = value.previewImage {
+            BBImageUtils.loadImage(contentsOf: imageUrl) { image in
+                self.thumbnail = image
+            }
         }
     }
 }

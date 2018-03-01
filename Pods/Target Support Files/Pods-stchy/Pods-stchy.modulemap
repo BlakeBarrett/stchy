@@ -1,0 +1,6 @@
+framework module Pods_stchy {
+  umbrella header "Pods-stchy-umbrella.h"
+
+  export *
+  module * { export * }
+}

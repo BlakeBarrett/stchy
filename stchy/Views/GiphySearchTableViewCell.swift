@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import AVFoundation
+import BBMultimediaUtils
 
 // TODO: Work on variable row-height TableViewCells.
 // https://www.raywenderlich.com/129059/self-sizing-table-view-cells
@@ -55,6 +56,16 @@ class GiphySearchTableViewCell: UITableViewCell {
         
         if playerLayer != nil {
             playerLayer?.removeFromSuperlayer()
+        }
+        
+        imageView?.image = nil
+        BBImageUtils.loadImage(contentsOf: item.previewImage) { [weak self] image in
+            guard let image = image else { return }
+            if let bounds = self?.contentView.bounds {
+                self?.imageView?.frame = bounds
+            }
+            self?.imageView?.image = image
+            self?.imageView?.contentMode = .scaleAspectFit
         }
         
         let player = AVPlayer(url: url)

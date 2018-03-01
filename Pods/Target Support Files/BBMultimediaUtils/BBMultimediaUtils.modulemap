@@ -1,0 +1,6 @@
+framework module BBMultimediaUtils {
+  umbrella header "BBMultimediaUtils-umbrella.h"
+
+  export *
+  module * { export * }
+}
